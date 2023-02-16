@@ -4,25 +4,31 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
-
-	"github.com/ACuellarbz/hello/handlers"
 )
+
+// create a new type
+type application struct {
+}
 
 // MAIN PROGRAM BELOW
 func main() {
-	mux := http.NewServeMux()
-	//Cresate a file server
-	fileServer := http.FileServer(http.Dir("./static/"))
-	mux.Handle("/resource/", http.StripPrefix("/resource", fileServer))
-	
 
-	mux.HandleFunc("/greeting", handlers.Greeting)
-	mux.HandleFunc("/", handlers.Home)
-	mux.HandleFunc("/about", handlers.About)
-	mux.HandleFunc("/message/create", handlers.MessageCreate)
-	log.Println("Starting server on port 4000")
-	err := http.ListenAndServe(":4000", mux)
+	//create a flag for speifing the port number when starting the server
+	addr := flag.String("port", ":4000", "HTTP network address")
+	flag.Parse()
+
+	//create an instance of the application type
+	app := &application{}
+
+	//create our own server (replacing listenandserve()
+	srv := &http.Server{
+		Addr:    *addr,
+		Handler: app.routes(),
+	}
+	log.Printf("Starting server on port %s", *addr)
+	err := srv.ListenAndServe()
 	log.Fatal(err)
 }
