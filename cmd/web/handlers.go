@@ -8,7 +8,11 @@ import (
 
 // Create our handler projects
 func (app *application) Greeting(w http.ResponseWriter, r *http.Request) {
-
+	question, err := app.question.Get()
+	if err != nil{
+		return
+	}
+	w.Write([]byte(question.Body))
 }
 
 // Create our handler functions

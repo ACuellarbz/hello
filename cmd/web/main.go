@@ -12,11 +12,13 @@ import (
 	"os"
 	"time"
 
+	"github.com/ACuellarbz/hello/internal/models"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 // create a new type
 type application struct {
+	question models.QuestionModel //application type containts a "question" of type Models.QuestionModel
 }
 
 // MAIN PROGRAM BELOW
@@ -25,14 +27,18 @@ func main() {
 	addr := flag.String("port", ":4000", "HTTP network address")
 	dsn := flag.String(" dsn", os.Getenv("BUSSES_DB_DSN"), "PostgreSQL DSN")
 	flag.Parse()
-	//create an instance of a pool
+	//create an instance of a connection pool
 	db, err := openDB(*dsn)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	//create an instance of the application type
-	app := &application{}
+	app := &application{
+		question: models.QuestionModel{DB: db},
+		
+	}
+
 	defer db.Close()
 	log.Println("Database connection pool established")
 	//create our own server (replacing listenandserve()

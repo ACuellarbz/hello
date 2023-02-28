@@ -5,6 +5,10 @@ migrate -path=./migrations -database=$BUSSES_DB_DSN up
 
 migrate -path=./migrations -database=$BUSSES_DB_DSN force 1 (this if database is dirty) 
 
-igrate -path=./migrations -database=$BUSSES_DB_DSN force goto _ 
+migrate -path=./migrations -database=$BUSSES_DB_DSN force goto _ 
 
+FEBRUARY 28 2023
 
+Each file has a model. A model is a representation of the table in  the database.
+
+The reason why we make executed structs singular is because 
